@@ -82,7 +82,12 @@ export const Playlist = ({ playlistId }) => {
         {currentTrack && (
           <>
             <div className={styles.topLeftCorner}>
-              <Logo style={{ flexBasis: 108 }} />
+              <Logo
+                style={{
+                  flexBasis: 108,
+                  filter: "drop-shadow(1px 1px 1px black)",
+                }}
+              />
               <div>
                 <p>PLAYING FROM PLAYLIST</p>
                 <p className={styles.boldText}>{playlist.title}</p>
