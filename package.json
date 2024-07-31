@@ -9,9 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@noble/hashes": "^1.4.0",
+    "@tanstack/react-query": "^5.51.15",
+    "bech32": "^2.0.0",
+    "next": "14.2.5",
+    "qrcode.react": "^3.1.0",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.5"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "eslint": "^8",
