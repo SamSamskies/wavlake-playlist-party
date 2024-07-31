@@ -75,7 +75,7 @@ export const Playlist = ({ playlistId }) => {
           src={currentTrackBackgrounImageSrc}
           alt="Track background image"
           fill
-          objectFit="cover"
+          style={{ objectFit: "cover" }}
         />
       )}
       <div className={styles.container}>
@@ -95,6 +95,7 @@ export const Playlist = ({ playlistId }) => {
                   alt={`artwork for ${currentTrack.title}`}
                   width={400}
                   height={400}
+                  priority
                 />
                 <div>
                   <p className={styles.boldText}>{currentTrack.title}</p>
