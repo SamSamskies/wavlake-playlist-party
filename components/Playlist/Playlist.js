@@ -67,7 +67,6 @@ export const Playlist = ({ playlistId }) => {
 
     setCurrentTrackIndex((currentTrack) => currentTrack - 1);
   };
-  console.log(playerRef.current);
 
   return (
     <main className={`${poppins.className} ${styles.main}`}>
