@@ -1,8 +1,6 @@
 import styles from "./Playlist.module.css";
 import { Poppins } from "next/font/google";
 import { QRCodeSVG } from "qrcode.react";
-import { bech32 } from "bech32";
-import { utf8ToBytes } from "@noble/hashes/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import Image from "next/image";
@@ -11,13 +9,6 @@ import "react-h5-audio-player/lib/styles.css";
 import { Logo } from "./Logo";
 
 const poppins = Poppins({ weight: ["400", "700"], subsets: ["latin"] });
-
-const encodeTrackLnurl = (trackId) => {
-  const url = `${process.env.NEXT_PUBLIC_WAVLAKE_DOT_COM_API_BASE_URL}/lnurl/track/${trackId}`;
-  const words = bech32.toWords(utf8ToBytes(url));
-
-  return bech32.encode("lnurl", words, 1023).toUpperCase();
-};
 
 const fetchPlaylist = (playlistId) =>
   fetch(
@@ -33,6 +24,13 @@ const fetchTrackBackgroundImage = (trackId) =>
     .then((res) => res.json())
     .then((res) => res.data.avatarUrl);
 
+const fetchLnurl = (trackId) =>
+  fetch(
+    `${process.env.NEXT_PUBLIC_WAVLAKE_DOT_COM_API_BASE_URL}/v1/lnurl?contentId=${trackId}&appId=samskies21`,
+  )
+    .then((res) => res.json())
+    .then((res) => res.lnurl);
+
 export const Playlist = ({ playlistId }) => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const { data: playlist } = useQuery({
@@ -46,6 +44,12 @@ export const Playlist = ({ playlistId }) => {
   const { data: currentTrackBackgrounImageSrc } = useQuery({
     queryKey: ["trackBackgroundImages", currentTrack?.id],
     queryFn: () => fetchTrackBackgroundImage(currentTrack?.id),
+    staleTime: Infinity,
+    enabled: Boolean(currentTrack?.id),
+  });
+  const { data: lnurl } = useQuery({
+    queryKey: ["lnurl", currentTrack?.id],
+    queryFn: () => fetchLnurl(currentTrack?.id),
     staleTime: Infinity,
     enabled: Boolean(currentTrack?.id),
   });
@@ -109,7 +113,7 @@ export const Playlist = ({ playlistId }) => {
               </div>
               <div>
                 <QRCodeSVG
-                  value={`lightning:${encodeTrackLnurl(currentTrack.id)}`}
+                  value={`lightning:${lnurl}`}
                   includeMargin
                   size={400}
                   className={styles.responsiveSquares}
