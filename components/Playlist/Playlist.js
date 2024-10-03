@@ -7,6 +7,7 @@ import Image from "next/image";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import { Logo } from "./Logo";
+import { useMediaQuery } from "react-responsive";
 
 const poppins = Poppins({ weight: ["400", "700"], subsets: ["latin"] });
 
@@ -71,6 +72,17 @@ export const Playlist = ({ playlistId }) => {
 
     setCurrentTrackIndex((currentTrack) => currentTrack - 1);
   };
+  const isDesktop = useMediaQuery({ query: "(min-width: 1025px)" });
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 588px)" });
+  const albumActualImageSize = 500;
+  const getImageSize = () => {
+    if (isSmallScreen) {
+      return 140;
+    }
+
+    return isDesktop ? 400 : 200;
+  };
+  const imageSize = getImageSize();
 
   return (
     <main className={`${poppins.className} ${styles.main}`}>
@@ -102,8 +114,9 @@ export const Playlist = ({ playlistId }) => {
                 <Image
                   src={currentTrack.artworkUrl}
                   alt={`artwork for ${currentTrack.title}`}
-                  width={400}
-                  height={400}
+                  width={albumActualImageSize}
+                  height={albumActualImageSize}
+                  style={{ width: imageSize, height: imageSize }}
                   priority
                 />
                 <div>
@@ -115,7 +128,7 @@ export const Playlist = ({ playlistId }) => {
                 <QRCodeSVG
                   value={`lightning:${lnurl}`}
                   includeMargin
-                  size={400}
+                  size={imageSize}
                   className={styles.responsiveSquares}
                 />
                 <div>

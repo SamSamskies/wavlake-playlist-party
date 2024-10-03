@@ -9,7 +9,6 @@
 
 .main p {
     font-size: 24px;
-    line-height: 36px;
     margin: 0;
     text-shadow: 1px 1px 2px black;
 }
@@ -63,4 +62,30 @@
 .main :global(.rhap_progress-indicator),
 .main :global(.rhap_volume-indicator) {
     background-color: white;
+}
+
+@media (max-width: 1024px) {
+    .main .boldText {
+        font-size: 20px;
+    }
+
+    .main p {
+        font-size: 12px;
+        line-height: 20px;
+    }
+}
+
+@media (max-width: 588px) {
+    .main {
+        padding: 24px;
+        height: calc(100vh - 48px);
+    }
+
+    .main .boldText {
+        font-size: 16px;
+    }
+
+    .bottomLeftCorner {
+        gap: 20px;
+    }
 }
