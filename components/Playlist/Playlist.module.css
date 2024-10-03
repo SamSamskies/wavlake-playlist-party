@@ -43,7 +43,7 @@
 .audioControlsContainer {
     position: absolute;
     top: 140px;
-    width: calc(100% - 60px);
+    width: 100%;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -73,6 +73,11 @@
         font-size: 12px;
         line-height: 20px;
     }
+
+    .audioControlsContainer {
+        opacity: 1;
+    }
+
 }
 
 @media (max-width: 588px) {
@@ -87,6 +92,6 @@
 
     .bottomLeftCorner {
         gap: 20px;
-        bottom: 40px;
+        bottom: 60px;
     }
 }
