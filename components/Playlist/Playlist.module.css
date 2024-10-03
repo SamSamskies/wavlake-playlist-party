@@ -87,5 +87,6 @@
 
     .bottomLeftCorner {
         gap: 20px;
+        bottom: 40px;
     }
 }
