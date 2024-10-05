@@ -7,7 +7,6 @@ import Image from "next/image";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import { Logo } from "./Logo";
-import { useMediaQuery } from "react-responsive";
 import Head from "next/head";
 import { getBaseUrl } from "@/utils/getBaseUrl";
 
@@ -60,17 +59,7 @@ export const Playlist = ({ title, tracks, playlistId }) => {
 
     setCurrentTrackIndex((currentTrack) => currentTrack - 1);
   };
-  const isDesktop = useMediaQuery({ query: "(min-width: 1025px)" });
-  const isSmallScreen = useMediaQuery({ query: "(max-width: 588px)" });
   const albumActualImageSize = 500;
-  const getImageSize = () => {
-    if (isSmallScreen) {
-      return 140;
-    }
-
-    return isDesktop ? 400 : 200;
-  };
-  const imageSize = getImageSize();
   const baseUrl = getBaseUrl();
   const ogImage = `${baseUrl}/api/og/${playlistId}`;
 
@@ -117,7 +106,7 @@ export const Playlist = ({ title, tracks, playlistId }) => {
                     alt={`artwork for ${currentTrack.title}`}
                     width={albumActualImageSize}
                     height={albumActualImageSize}
-                    style={{ width: imageSize, height: imageSize }}
+                    className={styles.responsiveSquares}
                     priority
                   />
                   <div>
@@ -129,7 +118,6 @@ export const Playlist = ({ title, tracks, playlistId }) => {
                   <QRCodeSVG
                     value={`lightning:${lnurl}`}
                     includeMargin
-                    size={imageSize}
                     className={styles.responsiveSquares}
                   />
                   <div>
