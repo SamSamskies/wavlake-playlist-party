@@ -9,6 +9,7 @@ export default function App({ Component, pageProps }) {
     <>
       <Head>
         <title>Wavlake Playlist Party</title>
+        <meta property="og:type" content="music.playlist" />
         <meta
           name="description"
           content="Play any Wavlake playlist in party mode 🎉"

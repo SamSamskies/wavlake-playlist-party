@@ -8,15 +8,10 @@ import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import { Logo } from "./Logo";
 import { useMediaQuery } from "react-responsive";
+import Head from "next/head";
+import { getBaseUrl } from "@/utils/getBaseUrl";
 
 const poppins = Poppins({ weight: ["400", "700"], subsets: ["latin"] });
-
-const fetchPlaylist = (playlistId) =>
-  fetch(
-    `${process.env.NEXT_PUBLIC_WAVLAKE_CATALOG_API_BASE_URL}/v1/playlists/${playlistId}`,
-  )
-    .then((res) => res.json())
-    .then((res) => res.data);
 
 const fetchTrackBackgroundImage = (trackId) =>
   fetch(
@@ -32,17 +27,10 @@ const fetchLnurl = (trackId) =>
     .then((res) => res.json())
     .then((res) => res.lnurl);
 
-export const Playlist = ({ playlistId }) => {
+export const Playlist = ({ title, tracks, playlistId }) => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const { data: playlist } = useQuery({
-    queryKey: ["playlists", playlistId],
-    queryFn: () => fetchPlaylist(playlistId),
-    staleTime: Infinity,
-  });
-  const currentTrack = playlist?.tracks
-    ? playlist.tracks[currentTrackIndex]
-    : null;
-  const { data: currentTrackBackgrounImageSrc } = useQuery({
+  const currentTrack = tracks ? tracks[currentTrackIndex] : null;
+  const { data: currentTrackBackgroundImageSrc } = useQuery({
     queryKey: ["trackBackgroundImages", currentTrack?.id],
     queryFn: () => fetchTrackBackgroundImage(currentTrack?.id),
     staleTime: Infinity,
@@ -57,7 +45,7 @@ export const Playlist = ({ playlistId }) => {
   const playerRef = useRef(null);
   const playNext = () => {
     setCurrentTrackIndex((currentTrack) =>
-      currentTrack < playlist.tracks.length - 1 ? currentTrack + 1 : 0,
+      currentTrack < tracks.length - 1 ? currentTrack + 1 : 0,
     );
   };
   const playPrevious = () => {
@@ -83,80 +71,94 @@ export const Playlist = ({ playlistId }) => {
     return isDesktop ? 400 : 200;
   };
   const imageSize = getImageSize();
+  const baseUrl = getBaseUrl();
+  const ogImage = `${baseUrl}/api/og/${playlistId}`;
 
   return (
-    <main className={`${poppins.className} ${styles.main}`}>
-      {currentTrackBackgrounImageSrc && (
-        <Image
-          src={currentTrackBackgrounImageSrc}
-          alt="Track background image"
-          fill
-          style={{ objectFit: "cover" }}
+    <>
+      <Head>
+        <meta property="og:title" content={title} />
+        <meta property="og:image" content={ogImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={ogImage} />
+        <meta
+          property="og:url"
+          content={`${baseUrl}/playlists/${playlistId}`}
         />
-      )}
-      <div className={styles.container}>
-        {currentTrack && (
-          <>
-            <div className={styles.topLeftCorner}>
-              <Logo
-                style={{
-                  flexBasis: 108,
-                  filter: "drop-shadow(1px 1px 1px black)",
-                }}
-              />
-              <div>
-                <p>PLAYING FROM PLAYLIST</p>
-                <p className={styles.boldText}>{playlist.title}</p>
-              </div>
-            </div>
-            <div className={styles.bottomLeftCorner}>
-              <div>
-                <Image
-                  src={currentTrack.artworkUrl}
-                  alt={`artwork for ${currentTrack.title}`}
-                  width={albumActualImageSize}
-                  height={albumActualImageSize}
-                  style={{ width: imageSize, height: imageSize }}
-                  priority
-                />
-                <div>
-                  <p className={styles.boldText}>{currentTrack.title}</p>
-                  <p>{currentTrack.artist}</p>
-                </div>
-              </div>
-              <div>
-                <QRCodeSVG
-                  value={`lightning:${lnurl}`}
-                  includeMargin
-                  size={imageSize}
-                  className={styles.responsiveSquares}
-                />
-                <div>
-                  <p className={styles.boldText}>
-                    Boost and support this artist
-                  </p>
-                  <p>
-                    Scan this QR code from any lightning wallet to send sats
-                    directly to the artist.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className={styles.audioControlsContainer}>
-              <AudioPlayer
-                ref={playerRef}
-                autoPlay
-                src={currentTrack.liveUrl}
-                showSkipControls
-                onClickPrevious={playPrevious}
-                onClickNext={playNext}
-                onEnded={playNext}
-                style={{ backgroundColor: "transparent", boxShadow: "none" }}
-              />
-            </div>
-          </>
+      </Head>
+      <main className={`${poppins.className} ${styles.main}`}>
+        {currentTrackBackgroundImageSrc && (
+          <Image
+            src={currentTrackBackgroundImageSrc}
+            alt="Track background image"
+            fill
+            style={{ objectFit: "cover" }}
+          />
         )}
-      </div>
-    </main>
+        <div className={styles.container}>
+          {currentTrack && (
+            <>
+              <div className={styles.topLeftCorner}>
+                <Logo
+                  style={{
+                    flexBasis: 108,
+                    filter: "drop-shadow(1px 1px 1px black)",
+                  }}
+                />
+                <div>
+                  <p>PLAYING FROM PLAYLIST</p>
+                  <p className={styles.boldText}>{title}</p>
+                </div>
+              </div>
+              <div className={styles.bottomLeftCorner}>
+                <div>
+                  <Image
+                    src={currentTrack.albumArtUrl}
+                    alt={`artwork for ${currentTrack.title}`}
+                    width={albumActualImageSize}
+                    height={albumActualImageSize}
+                    style={{ width: imageSize, height: imageSize }}
+                    priority
+                  />
+                  <div>
+                    <p className={styles.boldText}>{currentTrack.title}</p>
+                    <p>{currentTrack.artist}</p>
+                  </div>
+                </div>
+                <div>
+                  <QRCodeSVG
+                    value={`lightning:${lnurl}`}
+                    includeMargin
+                    size={imageSize}
+                    className={styles.responsiveSquares}
+                  />
+                  <div>
+                    <p className={styles.boldText}>
+                      Boost and support this artist
+                    </p>
+                    <p>
+                      Scan this QR code from any lightning wallet to send sats
+                      directly to the artist.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.audioControlsContainer}>
+                <AudioPlayer
+                  ref={playerRef}
+                  autoPlay
+                  src={currentTrack.mediaUrl}
+                  showSkipControls
+                  onClickPrevious={playPrevious}
+                  onClickNext={playNext}
+                  onEnded={playNext}
+                  style={{ backgroundColor: "transparent", boxShadow: "none" }}
+                />
+              </div>
+            </>
+          )}
+        </div>
+      </main>
+    </>
   );
 };
