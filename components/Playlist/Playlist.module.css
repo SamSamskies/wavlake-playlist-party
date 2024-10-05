@@ -64,6 +64,11 @@
     background-color: white;
 }
 
+.responsiveSquares {
+    width: 400px;
+    height: 400px;
+}
+
 @media (max-width: 1024px) {
     .main .boldText {
         font-size: 20px;
@@ -78,6 +83,10 @@
         opacity: 1;
     }
 
+    .responsiveSquares {
+        width: 200px;
+        height: 200px;
+    }
 }
 
 @media (max-width: 588px) {
@@ -93,5 +102,10 @@
     .bottomLeftCorner {
         gap: 20px;
         bottom: 100px;
+    }
+
+    .responsiveSquares {
+        width: 140px;
+        height: 140px;
     }
 }

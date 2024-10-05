@@ -1,6 +1,8 @@
 import styles from "./Home.module.css";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Head from "next/head";
+import { getBaseUrl } from "@/utils/getBaseUrl";
 
 function extractTrackIdFromWavlakeUrl(url) {
   const regex =
@@ -26,20 +28,30 @@ export const Home = () => {
       setError("Invalid Wavlake playlist URL");
     }
   };
+  const baseUrl = getBaseUrl();
+  const ogImage = `${baseUrl}/api/og`;
 
   return (
-    <main>
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <input
-          autoFocus
-          className={styles.input}
-          placeholder="Enter Wavlake playlist URL"
-        />
-        <button className={styles.button} type="submit">
-          Start the party 🎉
-        </button>
-      </form>
-      {error && <p className={styles.error}>{error}</p>}
-    </main>
+    <>
+      <Head>
+        <meta property="og:image" content={ogImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={ogImage} />
+        <meta property="og:url" content={baseUrl} />
+      </Head>
+      <main>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <input
+            autoFocus
+            className={styles.input}
+            placeholder="Enter Wavlake playlist URL"
+          />
+          <button className={styles.button} type="submit">
+            Start the party 🎉
+          </button>
+        </form>
+        {error && <p className={styles.error}>{error}</p>}
+      </main>
+    </>
   );
 };
