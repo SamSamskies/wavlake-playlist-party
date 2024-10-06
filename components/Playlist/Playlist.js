@@ -2,7 +2,7 @@ import styles from "./Playlist.module.css";
 import { Poppins } from "next/font/google";
 import { QRCodeSVG } from "qrcode.react";
 import { useQuery } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
@@ -62,6 +62,14 @@ export const Playlist = ({ title, tracks, playlistId }) => {
   const albumActualImageSize = 500;
   const baseUrl = getBaseUrl();
   const ogImage = `${baseUrl}/api/og/${playlistId}`;
+
+  useEffect(() => {
+    document.body.classList.add("hide-nl-banner");
+
+    return () => {
+      document.body.classList.remove("hide-nl-banner");
+    };
+  }, []);
 
   return (
     <>
