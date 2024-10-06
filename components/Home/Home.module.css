@@ -54,6 +54,8 @@ html[data-theme="dark"] .input {
 
 .playlistsContainer {
     margin-top: 40px;
+    width: 100%;
+    max-width: 600px;
 }
 
 .playlistRow {
@@ -64,7 +66,8 @@ html[data-theme="dark"] .input {
     border: 1px solid rgb(243, 174, 242);
     border-radius: 8px;
     overflow: hidden;
-    width: 600px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .playlistRow:hover {
@@ -77,6 +80,7 @@ html[data-theme="dark"] .input {
     flex-wrap: wrap;
     width: 100px;
     height: 100px;
+    min-width: 100px;
 }
 
 .playlistArt img {
