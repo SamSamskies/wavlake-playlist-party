@@ -4,7 +4,7 @@
     width: 100vw;
     justify-content: center;
     padding: 16px;
-    margin-top: 100px;
+    margin-top: 200px;
 }
 
 .input {
@@ -50,4 +50,50 @@ html[data-theme="dark"] .input {
 
 .error {
     color: red;
+}
+
+.playlistsContainer {
+    margin-top: 80px;
+}
+
+.playlistRow {
+    display: flex;
+    align-items: center;
+    color: #F0F0F0;
+    margin-bottom: 20px;
+    border: 1px solid rgb(243, 174, 242);
+    border-radius: 8px;
+    overflow: hidden;
+    width: 580px;
+}
+
+.playlistRow:hover {
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.playlistArt {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100px;
+    height: 100px;
+}
+
+.playlistArt img {
+    width: 50%;
+    height: 50%;
+}
+
+.playlistMetadata {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+}
+
+.playlistMetadata p {
+    margin: 2px 0;
+}
+
+.playlistMetadata p:first-child {
+    font-weight: bold;
 }
