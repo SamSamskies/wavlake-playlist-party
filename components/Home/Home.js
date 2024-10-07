@@ -25,6 +25,7 @@ function extractTrackIdFromWavlakeUrl(url) {
 export const Home = () => {
   const router = useRouter();
   const [pubkey, setPubkey] = useState(null);
+  const [isLoadingPlaylist, setIsLoadingPlaylist] = useState(false);
   const { data: playlists = [] } = useQuery({
     queryKey: ["playlists", pubkey],
     queryFn: () => getLibraryPlaylists(pubkey),
@@ -45,6 +46,15 @@ export const Home = () => {
       setError("Invalid Wavlake playlist URL");
     }
   };
+  const handlePlaylistClick = (id) => {
+    if (isLoadingPlaylist) {
+      return;
+    }
+
+    setIsLoadingPlaylist(true);
+    router.push(`/playlists/${id}`);
+  };
+
   const baseUrl = getBaseUrl();
   const ogImage = `${baseUrl}/api/og`;
 
@@ -102,7 +112,7 @@ export const Home = () => {
             <div
               key={id}
               className={styles.playlistRow}
-              onClick={() => router.push(`/playlists/${id}`)}
+              onClick={() => handlePlaylistClick(id)}
             >
               <div className={styles.playlistArt}>
                 {tracks
