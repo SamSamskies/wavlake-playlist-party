@@ -1,10 +1,13 @@
 .form {
     box-sizing: border-box;
     display: flex;
+    flex-wrap: wrap;
     width: 100vw;
     justify-content: center;
     padding: 16px;
     margin-top: 200px;
+    gap: 16px;
+    margin-bottom: 40px;
 }
 
 .input {
@@ -12,7 +15,6 @@
     border-radius: 5px;
     border: none;
     font-size: 16px;
-    margin-right: 10px;
     background-color: #f7fafc;
     color: #1a202c;
     box-shadow: none;
@@ -53,24 +55,24 @@ html[data-theme="dark"] .input {
 }
 
 .playlistsContainer {
-    margin-top: 40px;
     width: 100%;
-    max-width: 600px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
 }
 
-.playlistRow {
+.playlist {
     display: flex;
     align-items: center;
     color: #F0F0F0;
-    margin-bottom: 20px;
     border: 1px solid rgb(243, 174, 242);
     border-radius: 8px;
     overflow: hidden;
-    margin-left: 20px;
-    margin-right: 20px;
+    width: 500px;
 }
 
-.playlistRow:hover {
+.playlist:hover {
     opacity: 0.7;
     cursor: pointer;
 }
@@ -100,4 +102,16 @@ html[data-theme="dark"] .input {
 
 .playlistMetadata p:first-child {
     font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    .playlist {
+        width: 600px;
+    }
+}
+
+@media (max-width: 480px) {
+    .form {
+        flex-direction: column;
+    }
 }

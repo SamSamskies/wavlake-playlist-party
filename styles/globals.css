@@ -19,6 +19,7 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
+  padding: 0 16px;
 }
 body > p {
   text-align: center;
@@ -30,6 +31,10 @@ main {
   flex-direction: column;
   flex-grow: 1;
   margin-top: 100px;
+}
+
+h2 {
+  color: #F0F0F0;
 }
 
 .hide-nl-banner nl-banner {

@@ -107,11 +107,12 @@ export const Home = () => {
           </button>
         </form>
         {error && <p className={styles.error}>{error}</p>}
+        <h2>Library</h2>
         <div className={styles.playlistsContainer}>
           {playlists.map(({ id, title: playlistTitle, tracks }) => (
             <div
               key={id}
-              className={styles.playlistRow}
+              className={styles.playlist}
               onClick={() => handlePlaylistClick(id)}
             >
               <div className={styles.playlistArt}>
