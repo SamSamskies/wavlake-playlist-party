@@ -1,10 +1,10 @@
 import styles from "./Home.module.css";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import Head from "next/head";
 import { getBaseUrl } from "@/utils/getBaseUrl";
 import { useQuery } from "@tanstack/react-query";
 import { PlaylistSection } from "@/components/Home/PlaylistSection";
+import { fetchTrendingRock, fetchTrendingHipHop } from "@/utils/fetchPlaylist";
 
 const getLibraryPlaylists = async (pubkey) => {
   return fetch(
@@ -23,9 +23,22 @@ function extractTrackIdFromWavlakeUrl(url) {
 }
 
 export const Home = () => {
-  const router = useRouter();
   const [pubkey, setPubkey] = useState(null);
-  const [isLoadingPlaylist, setIsLoadingPlaylist] = useState(false);
+  const { data: trendingRockPlaylist } = useQuery({
+    queryKey: ["trending-rock-playlist"],
+    queryFn: fetchTrendingRock,
+    staleTime: Infinity,
+  });
+  console.log(trendingRockPlaylist);
+  const { data: trendingHipHopPlaylist } = useQuery({
+    queryKey: ["trending-rock-hip-hop"],
+    queryFn: fetchTrendingHipHop,
+    staleTime: Infinity,
+  });
+  const trendingPlaylists = [
+    trendingRockPlaylist,
+    trendingHipHopPlaylist,
+  ].filter((pl) => pl !== undefined);
   const { data: playlists = [] } = useQuery({
     queryKey: ["playlists", pubkey],
     queryFn: () => getLibraryPlaylists(pubkey),
@@ -45,14 +58,6 @@ export const Home = () => {
     } else {
       setError("Invalid Wavlake playlist URL");
     }
-  };
-  const handlePlaylistClick = (id) => {
-    if (isLoadingPlaylist) {
-      return;
-    }
-
-    setIsLoadingPlaylist(true);
-    router.push(`/playlists/${id}`);
   };
 
   const baseUrl = getBaseUrl();
@@ -95,7 +100,7 @@ export const Home = () => {
         <meta name="twitter:image" content={ogImage} />
         <meta property="og:url" content={baseUrl} />
       </Head>
-      <main>
+      <main className={styles.main}>
         <form className={styles.form} onSubmit={handleSubmit}>
           <input
             autoFocus
@@ -107,6 +112,7 @@ export const Home = () => {
           </button>
         </form>
         {error && <p className={styles.error}>{error}</p>}
+        <PlaylistSection title="Trending" playlists={trendingPlaylists} />
         <PlaylistSection title="Library" playlists={playlists} />
       </main>
     </>

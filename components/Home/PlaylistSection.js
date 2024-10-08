@@ -1,7 +1,20 @@
 import styles from "./PlaylistSection.module.css";
 import Image from "next/image";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 export const PlaylistSection = ({ title, playlists }) => {
+  const router = useRouter();
+  const [isLoadingPlaylist, setIsLoadingPlaylist] = useState(false);
+  const handlePlaylistClick = (id) => {
+    if (isLoadingPlaylist) {
+      return;
+    }
+
+    setIsLoadingPlaylist(true);
+    router.push(`/playlists/${id}`);
+  };
+
   return (
     <div className={styles.playlistSection}>
       <h2>{title}</h2>
@@ -15,10 +28,10 @@ export const PlaylistSection = ({ title, playlists }) => {
             <div className={styles.playlistArt}>
               {tracks
                 .slice(0, 4)
-                .map(({ id, artworkUrl, title: trackTitle }) => (
+                .map(({ id, artworkUrl, albumArtUrl, title: trackTitle }) => (
                   <Image
                     key={id}
-                    src={artworkUrl}
+                    src={artworkUrl ?? albumArtUrl}
                     alt={`${trackTitle} art`}
                     width={500}
                     height={500}
