@@ -29,7 +29,6 @@ export const Home = () => {
     queryFn: fetchTrendingRock,
     staleTime: Infinity,
   });
-  console.log(trendingRockPlaylist);
   const { data: trendingHipHopPlaylist } = useQuery({
     queryKey: ["trending-rock-hip-hop"],
     queryFn: fetchTrendingHipHop,
