@@ -9,8 +9,10 @@
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
-    justify-content: center;
+    justify-content: flex-start;
     text-align: left;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 .playlist {
@@ -20,7 +22,12 @@
     border: 1px solid rgb(243, 174, 242);
     border-radius: 8px;
     overflow: hidden;
-    width: 500px;
+    flex: 1 1 calc(50% - 16px);
+    box-sizing: border-box;
+}
+
+.playlistsContainer > .playlist:nth-child(odd) {
+    flex-grow: 0;
 }
 
 .playlist:hover {
@@ -55,8 +62,8 @@
     font-weight: bold;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
     .playlist {
-        width: 600px;
+        flex: 1 1 100%;
     }
 }

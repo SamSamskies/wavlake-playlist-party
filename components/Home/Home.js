@@ -4,7 +4,11 @@ import Head from "next/head";
 import { getBaseUrl } from "@/utils/getBaseUrl";
 import { useQuery } from "@tanstack/react-query";
 import { PlaylistSection } from "@/components/Home/PlaylistSection";
-import { fetchTrendingRock, fetchTrendingHipHop } from "@/utils/fetchPlaylist";
+import {
+  fetchTrendingRock,
+  fetchTrendingHipHop,
+  fetchPlaylistByPlaylistId,
+} from "@/utils/fetchPlaylist";
 
 const getLibraryPlaylists = async (pubkey) => {
   return fetch(
@@ -24,6 +28,12 @@ function extractTrackIdFromWavlakeUrl(url) {
 
 export const Home = () => {
   const [pubkey, setPubkey] = useState(null);
+  const { data: featuredPlaylist } = useQuery({
+    queryKey: ["wavlake-featured-playlist"],
+    queryFn: () =>
+      fetchPlaylistByPlaylistId("8f4cd4a2-1be6-45f7-8d9b-fcf1fc2e4b9f"),
+    staleTime: Infinity,
+  });
   const { data: trendingRockPlaylist } = useQuery({
     queryKey: ["trending-rock-playlist"],
     queryFn: fetchTrendingRock,
@@ -35,6 +45,7 @@ export const Home = () => {
     staleTime: Infinity,
   });
   const trendingPlaylists = [
+    featuredPlaylist,
     trendingRockPlaylist,
     trendingHipHopPlaylist,
   ].filter((pl) => pl !== undefined);
