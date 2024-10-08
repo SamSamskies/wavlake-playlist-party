@@ -15,7 +15,7 @@ export const PlaylistSection = ({ title, playlists }) => {
     router.push(`/playlists/${id}`);
   };
 
-  return (
+  return playlists.length > 0 ? (
     <div className={styles.playlistSection}>
       <h2>{title}</h2>
       <div className={styles.playlistsContainer}>
@@ -46,5 +46,5 @@ export const PlaylistSection = ({ title, playlists }) => {
         ))}
       </div>
     </div>
-  );
+  ) : null;
 };
