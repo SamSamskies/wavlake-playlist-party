@@ -54,62 +54,6 @@ html[data-theme="dark"] .input {
     color: red;
 }
 
-.playlistsContainer {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    justify-content: center;
-}
-
-.playlist {
-    display: flex;
-    align-items: center;
-    color: #F0F0F0;
-    border: 1px solid rgb(243, 174, 242);
-    border-radius: 8px;
-    overflow: hidden;
-    width: 500px;
-}
-
-.playlist:hover {
-    opacity: 0.7;
-    cursor: pointer;
-}
-
-.playlistArt {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100px;
-    height: 100px;
-    min-width: 100px;
-}
-
-.playlistArt img {
-    width: 50%;
-    height: 50%;
-}
-
-.playlistMetadata {
-    display: flex;
-    flex-direction: column;
-    padding: 16px;
-}
-
-.playlistMetadata p {
-    margin: 2px 0;
-}
-
-.playlistMetadata p:first-child {
-    font-weight: bold;
-}
-
-@media (max-width: 600px) {
-    .playlist {
-        width: 600px;
-    }
-}
-
 @media (max-width: 480px) {
     .form {
         flex-direction: column;

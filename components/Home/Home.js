@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import { getBaseUrl } from "@/utils/getBaseUrl";
 import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
+import { PlaylistSection } from "@/components/Home/PlaylistSection";
 
 const getLibraryPlaylists = async (pubkey) => {
   return fetch(
@@ -107,34 +107,7 @@ export const Home = () => {
           </button>
         </form>
         {error && <p className={styles.error}>{error}</p>}
-        <h2>Library</h2>
-        <div className={styles.playlistsContainer}>
-          {playlists.map(({ id, title: playlistTitle, tracks }) => (
-            <div
-              key={id}
-              className={styles.playlist}
-              onClick={() => handlePlaylistClick(id)}
-            >
-              <div className={styles.playlistArt}>
-                {tracks
-                  .slice(0, 4)
-                  .map(({ id, artworkUrl, title: trackTitle }) => (
-                    <Image
-                      key={id}
-                      src={artworkUrl}
-                      alt={`${trackTitle} art`}
-                      width={500}
-                      height={500}
-                    />
-                  ))}
-              </div>
-              <div className={styles.playlistMetadata}>
-                <p>{playlistTitle}</p>
-                <p>{tracks.length} tracks</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        <PlaylistSection title="Library" playlists={playlists} />
       </main>
     </>
   );
