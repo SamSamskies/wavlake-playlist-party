@@ -45,7 +45,6 @@ export const Home = () => {
     staleTime: Infinity,
   });
   const trendingPlaylists = [
-    featuredPlaylist,
     trendingRockPlaylist,
     trendingHipHopPlaylist,
   ].filter((pl) => pl !== undefined);
@@ -122,6 +121,10 @@ export const Home = () => {
           </button>
         </form>
         {error && <p className={styles.error}>{error}</p>}
+        <PlaylistSection
+          title="Featured"
+          playlists={featuredPlaylist ? [featuredPlaylist] : []}
+        />
         <PlaylistSection title="Trending" playlists={trendingPlaylists} />
         <PlaylistSection title="Library" playlists={playlists} />
       </main>
