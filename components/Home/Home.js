@@ -8,6 +8,11 @@ import {
   fetchTrendingRock,
   fetchTrendingHipHop,
   fetchPlaylistByPlaylistId,
+  PLAYLIST,
+  TRENDING_ROCK_PLAYLIST_ID,
+  TRENDING_HIPHOP_PLAYLIST_ID,
+  TOP_40,
+  fetchTop40,
 } from "@/utils/fetchPlaylist";
 
 const getLibraryPlaylists = async (pubkey) => {
@@ -26,21 +31,30 @@ function extractTrackIdFromWavlakeUrl(url) {
   return match ? match[1] : null;
 }
 
+const featuredPlaylistId = "8f4cd4a2-1be6-45f7-8d9b-fcf1fc2e4b9f";
+
 export const Home = () => {
   const [pubkey, setPubkey] = useState(null);
   const { data: featuredPlaylist } = useQuery({
-    queryKey: ["wavlake-featured-playlist"],
-    queryFn: () =>
-      fetchPlaylistByPlaylistId("8f4cd4a2-1be6-45f7-8d9b-fcf1fc2e4b9f"),
+    queryKey: [PLAYLIST, featuredPlaylistId],
+    queryFn: () => fetchPlaylistByPlaylistId(featuredPlaylistId),
     staleTime: Infinity,
   });
+  const { data: top40Playlist } = useQuery({
+    queryKey: [PLAYLIST, TOP_40],
+    queryFn: fetchTop40,
+    staleTime: Infinity,
+  });
+  const featuredPlaylists = [featuredPlaylist, top40Playlist].filter(
+    (p) => p !== undefined,
+  );
   const { data: trendingRockPlaylist } = useQuery({
-    queryKey: ["trending-rock-playlist"],
+    queryKey: [PLAYLIST, TRENDING_ROCK_PLAYLIST_ID],
     queryFn: fetchTrendingRock,
     staleTime: Infinity,
   });
   const { data: trendingHipHopPlaylist } = useQuery({
-    queryKey: ["trending-rock-hip-hop"],
+    queryKey: [PLAYLIST, TRENDING_HIPHOP_PLAYLIST_ID],
     queryFn: fetchTrendingHipHop,
     staleTime: Infinity,
   });
@@ -121,10 +135,7 @@ export const Home = () => {
           </button>
         </form>
         {error && <p className={styles.error}>{error}</p>}
-        <PlaylistSection
-          title="Featured"
-          playlists={featuredPlaylist ? [featuredPlaylist] : []}
-        />
+        <PlaylistSection title="Featured" playlists={featuredPlaylists} />
         <PlaylistSection title="Trending" playlists={trendingPlaylists} />
         <PlaylistSection title="Library" playlists={playlists} />
       </main>

@@ -1,9 +1,12 @@
+export const PLAYLIST = "playlist";
 export const TRENDING_ROCK_PLAYLIST_ID = "trending-rock";
-
 export const TRENDING_HIPHOP_PLAYLIST_ID = "trending-hiphop";
+export const TOP_40 = "top-40";
 
 export const fetchPlaylist = async (playlistId) => {
   switch (playlistId) {
+    case TOP_40:
+      return fetchTop40();
     case TRENDING_ROCK_PLAYLIST_ID:
       return fetchTrendingRock();
     case TRENDING_HIPHOP_PLAYLIST_ID:
@@ -47,4 +50,12 @@ export const fetchTrendingHipHop = async () => {
     title: "Hip-Hop",
     tracks: playlist,
   };
+};
+
+export const fetchTop40 = async () => {
+  return fetch(
+    `${process.env.NEXT_PUBLIC_WAVLAKE_DOT_COM_API_BASE_URL}/v1/content/rankings?sort=sats&days=7&limit=40`,
+  )
+    .then((res) => res.json())
+    .then((res) => ({ id: TOP_40, title: "Top 40", tracks: res }));
 };
