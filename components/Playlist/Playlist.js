@@ -26,20 +26,18 @@ const fetchLnurl = (trackId) =>
     .then((res) => res.json())
     .then((res) => res.lnurl);
 
-export const Playlist = ({ title, tracks, playlistId }) => {
+export const Playlist = ({ title, tracks = [], playlistId }) => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const currentTrack = tracks ? tracks[currentTrackIndex] : null;
+  const currentTrack = tracks[currentTrackIndex];
   const { data: currentTrackBackgroundImageSrc } = useQuery({
-    queryKey: ["trackBackgroundImages", currentTrack?.id],
-    queryFn: () => fetchTrackBackgroundImage(currentTrack?.id),
+    queryKey: ["trackBackgroundImages", currentTrack.id],
+    queryFn: () => fetchTrackBackgroundImage(currentTrack.id),
     staleTime: Infinity,
-    enabled: Boolean(currentTrack?.id),
   });
   const { data: lnurl } = useQuery({
-    queryKey: ["lnurl", currentTrack?.id],
-    queryFn: () => fetchLnurl(currentTrack?.id),
+    queryKey: ["lnurl", currentTrack.id],
+    queryFn: () => fetchLnurl(currentTrack.id),
     staleTime: Infinity,
-    enabled: Boolean(currentTrack?.id),
   });
   const playerRef = useRef(null);
   const playNext = () => {
@@ -93,66 +91,64 @@ export const Playlist = ({ title, tracks, playlistId }) => {
           />
         )}
         <div className={styles.container}>
-          {currentTrack && (
-            <>
-              <div className={styles.topLeftCorner}>
-                <Logo
-                  style={{
-                    flexBasis: 108,
-                    filter: "drop-shadow(1px 1px 1px black)",
-                  }}
+          <>
+            <div className={styles.topLeftCorner}>
+              <Logo
+                style={{
+                  flexBasis: 108,
+                  filter: "drop-shadow(1px 1px 1px black)",
+                }}
+              />
+              <div>
+                <p>PLAYING FROM PLAYLIST</p>
+                <p className={styles.boldText}>{title}</p>
+              </div>
+            </div>
+            <div className={styles.bottomLeftCorner}>
+              <div>
+                <Image
+                  src={currentTrack.albumArtUrl}
+                  alt={`artwork for ${currentTrack.title}`}
+                  width={albumActualImageSize}
+                  height={albumActualImageSize}
+                  className={styles.responsiveSquares}
+                  priority
                 />
                 <div>
-                  <p>PLAYING FROM PLAYLIST</p>
-                  <p className={styles.boldText}>{title}</p>
+                  <p className={styles.boldText}>{currentTrack.title}</p>
+                  <p>{currentTrack.artist}</p>
                 </div>
               </div>
-              <div className={styles.bottomLeftCorner}>
-                <div>
-                  <Image
-                    src={currentTrack.albumArtUrl}
-                    alt={`artwork for ${currentTrack.title}`}
-                    width={albumActualImageSize}
-                    height={albumActualImageSize}
-                    className={styles.responsiveSquares}
-                    priority
-                  />
-                  <div>
-                    <p className={styles.boldText}>{currentTrack.title}</p>
-                    <p>{currentTrack.artist}</p>
-                  </div>
-                </div>
-                <div>
-                  <QRCodeSVG
-                    value={`lightning:${lnurl}`}
-                    includeMargin
-                    className={styles.responsiveSquares}
-                  />
-                  <div>
-                    <p className={styles.boldText}>
-                      Boost and support this artist
-                    </p>
-                    <p>
-                      Scan this QR code from any lightning wallet to send sats
-                      directly to the artist.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className={styles.audioControlsContainer}>
-                <AudioPlayer
-                  ref={playerRef}
-                  autoPlay
-                  src={currentTrack.mediaUrl}
-                  showSkipControls
-                  onClickPrevious={playPrevious}
-                  onClickNext={playNext}
-                  onEnded={playNext}
-                  style={{ backgroundColor: "transparent", boxShadow: "none" }}
+              <div>
+                <QRCodeSVG
+                  value={`lightning:${lnurl}`}
+                  includeMargin
+                  className={styles.responsiveSquares}
                 />
+                <div>
+                  <p className={styles.boldText}>
+                    Boost and support this artist
+                  </p>
+                  <p>
+                    Scan this QR code from any lightning wallet to send sats
+                    directly to the artist.
+                  </p>
+                </div>
               </div>
-            </>
-          )}
+            </div>
+            <div className={styles.audioControlsContainer}>
+              <AudioPlayer
+                ref={playerRef}
+                autoPlay
+                src={currentTrack.mediaUrl}
+                showSkipControls
+                onClickPrevious={playPrevious}
+                onClickNext={playNext}
+                onEnded={playNext}
+                style={{ backgroundColor: "transparent", boxShadow: "none" }}
+              />
+            </div>
+          </>
         </div>
       </main>
     </>
