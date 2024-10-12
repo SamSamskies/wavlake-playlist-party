@@ -1,7 +1,7 @@
 import styles from "./Playlist.module.css";
 import { Poppins } from "next/font/google";
 import { QRCodeSVG } from "qrcode.react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import AudioPlayer from "react-h5-audio-player";
@@ -29,6 +29,7 @@ const fetchLnurl = (trackId) =>
 export const Playlist = ({ title, tracks = [], playlistId }) => {
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const currentTrack = tracks[currentTrackIndex];
+  const queryClient = useQueryClient();
   const { data: currentTrackBackgroundImageSrc } = useQuery({
     queryKey: ["trackBackgroundImages", currentTrack.id],
     queryFn: () => fetchTrackBackgroundImage(currentTrack.id),
@@ -68,6 +69,22 @@ export const Playlist = ({ title, tracks = [], playlistId }) => {
       document.body.classList.remove("hide-nl-banner");
     };
   }, []);
+
+  // eager load next track assets
+  useEffect(() => {
+    const nextTrack = tracks[currentTrackIndex + 1];
+
+    if (nextTrack) {
+      queryClient.prefetchQuery({
+        queryKey: ["trackBackgroundImages", nextTrack.id],
+        queryFn: () => fetchTrackBackgroundImage(nextTrack.id),
+      });
+      queryClient.prefetchQuery({
+        queryKey: ["lnurl", nextTrack.id],
+        queryFn: () => fetchLnurl(nextTrack.id),
+      });
+    }
+  }, [currentTrack]);
 
   return (
     <>
