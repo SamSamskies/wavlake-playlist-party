@@ -45,9 +45,7 @@ export const Home = () => {
     queryFn: fetchTop40,
     staleTime: Infinity,
   });
-  const featuredPlaylists = [featuredPlaylist, top40Playlist].filter(
-    (p) => p !== undefined,
-  );
+  const featuredPlaylists = [featuredPlaylist].filter((p) => p !== undefined);
   const { data: trendingRockPlaylist } = useQuery({
     queryKey: [PLAYLIST, TRENDING_ROCK_PLAYLIST_ID],
     queryFn: fetchTrendingRock,
@@ -59,6 +57,7 @@ export const Home = () => {
     staleTime: Infinity,
   });
   const trendingPlaylists = [
+    top40Playlist,
     trendingRockPlaylist,
     trendingHipHopPlaylist,
   ].filter((pl) => pl !== undefined);
