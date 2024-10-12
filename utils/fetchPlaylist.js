@@ -22,7 +22,7 @@ export const fetchPlaylistByPlaylistId = async (playlistId) => {
     error.status = response.status;
     throw error;
   }
-  return response.json();
+  return { id: playlistId, ...(await response.json()) };
 };
 
 export const fetchTrendingPlaylistByGenre = async (genre) => {
