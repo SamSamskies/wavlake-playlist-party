@@ -26,12 +26,13 @@ function extractTrackIdFromWavlakeUrl(url) {
   return match ? match[1] : null;
 }
 
+const featuredPlaylistId = "8f4cd4a2-1be6-45f7-8d9b-fcf1fc2e4b9f";
+
 export const Home = () => {
   const [pubkey, setPubkey] = useState(null);
   const { data: featuredPlaylist } = useQuery({
     queryKey: ["wavlake-featured-playlist"],
-    queryFn: () =>
-      fetchPlaylistByPlaylistId("8f4cd4a2-1be6-45f7-8d9b-fcf1fc2e4b9f"),
+    queryFn: () => fetchPlaylistByPlaylistId(featuredPlaylistId),
     staleTime: Infinity,
   });
   const { data: trendingRockPlaylist } = useQuery({
@@ -124,6 +125,7 @@ export const Home = () => {
         <PlaylistSection
           title="Featured"
           playlists={featuredPlaylist ? [featuredPlaylist] : []}
+          playlistId={featuredPlaylistId}
         />
         <PlaylistSection title="Trending" playlists={trendingPlaylists} />
         <PlaylistSection title="Library" playlists={playlists} />
