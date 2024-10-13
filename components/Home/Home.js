@@ -14,6 +14,7 @@ import {
   TOP_40,
   fetchTop40,
 } from "@/utils/fetchPlaylist";
+import { useRouter } from "next/router";
 
 const getLibraryPlaylists = async (pubkey) => {
   return fetch(
@@ -34,6 +35,7 @@ function extractTrackIdFromWavlakeUrl(url) {
 const featuredPlaylistId = "8f4cd4a2-1be6-45f7-8d9b-fcf1fc2e4b9f";
 
 export const Home = () => {
+  const router = useRouter();
   const [pubkey, setPubkey] = useState(null);
   const { data: featuredPlaylist } = useQuery({
     queryKey: [PLAYLIST, featuredPlaylistId],
