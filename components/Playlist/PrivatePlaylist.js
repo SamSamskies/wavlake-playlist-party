@@ -14,7 +14,7 @@ export const PrivatePlaylist = ({ pubkey, title, playlistId }) => {
         <meta property="og:title" content={title} />
         <meta
           property="og:url"
-          content={`${baseUrl}/private/playlists/${pubkey}/${playlistId}`}
+          content={`${baseUrl}/private/${pubkey}/playlists/${playlistId}`}
         />
       </Head>
       <PlaylistContent title={title} tracks={likedPlaylist?.tracks} />
