@@ -13,16 +13,10 @@ import {
   TRENDING_HIPHOP_PLAYLIST_ID,
   TOP_40,
   fetchTop40,
+  fetchLibraryPlaylists,
 } from "@/utils/fetchPlaylist";
+import { useLikedPlaylist } from "@/hooks/useLikedPlaylist";
 import { useRouter } from "next/router";
-
-const getLibraryPlaylists = async (pubkey) => {
-  return fetch(
-    `${process.env.NEXT_PUBLIC_WAVLAKE_CATALOG_API_BASE_URL}/v1/playlists/user/${pubkey}`,
-  )
-    .then((res) => res.json())
-    .then((res) => res.data);
-};
 
 function extractTrackIdFromWavlakeUrl(url) {
   const regex =
@@ -65,10 +59,12 @@ export const Home = () => {
   ].filter((pl) => pl !== undefined);
   const { data: playlists = [] } = useQuery({
     queryKey: ["playlists", pubkey],
-    queryFn: () => getLibraryPlaylists(pubkey),
+    queryFn: () => fetchLibraryPlaylists(pubkey),
     enabled: Boolean(pubkey),
     staleTime: Infinity,
   });
+  const { data: likedPlaylist } = useLikedPlaylist(Boolean(pubkey));
+  const libraryPlaylists = [...playlists, likedPlaylist].filter((pl) => pl);
   const [error, setError] = useState(null);
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -138,7 +134,11 @@ export const Home = () => {
         {error && <p className={styles.error}>{error}</p>}
         <PlaylistSection title="Featured" playlists={featuredPlaylists} />
         <PlaylistSection title="Trending" playlists={trendingPlaylists} />
-        <PlaylistSection title="Library" playlists={playlists} />
+        <PlaylistSection
+          pubkey={pubkey}
+          title="Library"
+          playlists={libraryPlaylists}
+        />
       </main>
     </>
   );

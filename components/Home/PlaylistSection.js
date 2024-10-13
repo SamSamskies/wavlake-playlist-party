@@ -2,8 +2,9 @@ import styles from "./PlaylistSection.module.css";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { LIKED } from "@/utils/fetchPlaylist";
 
-export const PlaylistSection = ({ title, playlists }) => {
+export const PlaylistSection = ({ pubkey, title, playlists }) => {
   const router = useRouter();
   const [isLoadingPlaylist, setIsLoadingPlaylist] = useState(false);
   const handlePlaylistClick = (id) => {
@@ -12,14 +13,19 @@ export const PlaylistSection = ({ title, playlists }) => {
     }
 
     setIsLoadingPlaylist(true);
-    router.push(`/playlists/${id}`);
+
+    if (Boolean(pubkey) && id === LIKED) {
+      router.push(`/playlists/${id}/${pubkey}`);
+    } else {
+      router.push(`/playlists/${id}`);
+    }
   };
 
   return playlists.length > 0 ? (
     <div className={styles.playlistSection}>
       <h2>{title}</h2>
       <div className={styles.playlistsContainer}>
-        {playlists.map(({ id, title: playlistTitle, tracks }) => (
+        {playlists.map(({ id, title: playlistTitle, tracks, isPrivate }) => (
           <div
             key={id}
             className={styles.playlist}
@@ -41,6 +47,11 @@ export const PlaylistSection = ({ title, playlists }) => {
             <div className={styles.playlistMetadata}>
               <p>{playlistTitle}</p>
               <p>{tracks.length} tracks</p>
+              {isPrivate && (
+                <small>
+                  Private (must be logged in with nip-07 ext to play)
+                </small>
+              )}
             </div>
           </div>
         ))}

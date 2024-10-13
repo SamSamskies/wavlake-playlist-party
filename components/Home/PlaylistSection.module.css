@@ -54,6 +54,10 @@
     padding: 16px;
 }
 
+.playlistMetadata small {
+    color: #CCC;
+}
+
 .playlistMetadata p {
     margin: 2px 0;
 }
