@@ -15,7 +15,7 @@ export const PlaylistSection = ({ pubkey, title, playlists }) => {
     setIsLoadingPlaylist(true);
 
     if (Boolean(pubkey) && id === LIKED) {
-      router.push(`/playlists/${id}/${pubkey}`);
+      router.push(`/private/playlists/${pubkey}/${id}`);
     } else {
       router.push(`/playlists/${id}`);
     }
