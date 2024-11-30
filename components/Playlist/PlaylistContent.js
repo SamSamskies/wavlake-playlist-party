@@ -45,11 +45,17 @@ export const PlaylistContent = ({ title, tracks = [] }) => {
   return tracks.length > 0 ? (
     <main className={`${poppins.className} ${styles.main}`}>
       {currentTrackBackgroundImageSrc && (
-        <Image
+        <img
           src={currentTrackBackgroundImageSrc}
           alt="Track background image"
-          fill
-          style={{ objectFit: "cover" }}
+          style={{
+            objectFit: "cover",
+            width: "100vw",
+            height: "100vh",
+            position: "absolute",
+            top: 0,
+            left: 0,
+          }}
         />
       )}
       <div className={styles.container}>
