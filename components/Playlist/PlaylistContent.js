@@ -1,7 +1,6 @@
 import styles from "./Playlist.module.css";
 import { QRCodeSVG } from "qrcode.react";
 import { useRef, useState } from "react";
-import Image from "next/image";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 import { Logo } from "./Logo";
@@ -74,13 +73,12 @@ export const PlaylistContent = ({ title, tracks = [] }) => {
           </div>
           <div className={styles.bottomLeftCorner}>
             <div>
-              <Image
+              <img
                 src={currentTrack.albumArtUrl ?? currentTrack.artworkUrl}
                 alt={`artwork for ${currentTrack.title}`}
                 width={albumActualImageSize}
                 height={albumActualImageSize}
                 className={styles.responsiveSquares}
-                priority
               />
               <div>
                 <p className={styles.boldText}>{currentTrack.title}</p>
