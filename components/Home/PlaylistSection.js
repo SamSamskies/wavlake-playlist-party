@@ -1,5 +1,4 @@
 import styles from "./PlaylistSection.module.css";
-import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { LIKED } from "@/utils/fetchPlaylist";
@@ -35,7 +34,7 @@ export const PlaylistSection = ({ pubkey, title, playlists }) => {
               {tracks
                 .slice(0, 4)
                 .map(({ id, artworkUrl, albumArtUrl, title: trackTitle }) => (
-                  <Image
+                  <img
                     key={id}
                     src={artworkUrl ?? albumArtUrl}
                     alt={`${trackTitle} art`}
